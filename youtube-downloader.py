@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import tkinter.ttk
 from pytube import YouTube
+from PIL import Image, ImageTk
 import os
 
 # functions
@@ -68,6 +69,9 @@ if __name__ == "__main__":
     root = Tk()
     root.geometry("600x550")
     root.title("YouTube Downloder")
+    icon = Image.open("youtube-downloader.ico")
+    iconImage = ImageTk.PhotoImage(icon)
+    root.iconphoto(False,iconImage)
     status = StringVar()
     video_title = StringVar()
     video_size = StringVar()
