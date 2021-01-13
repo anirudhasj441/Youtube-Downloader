@@ -6,6 +6,12 @@ from PIL import Image, ImageTk
 import os
 
 # functions
+
+def cancellDownload(event):
+    print("Downloding Cancelled")
+    setStatus("Downloding Cancelled")
+    root.quit()
+
 def setStatus(statusvar):
     status.set(statusvar)
     statusLabel.update()
@@ -28,7 +34,7 @@ def progressbar(value):
 
 def downloadVideo(yt):
     progress.grid(row=0,column=0)
-    video = yt.streams.filter(progressive = True, file_extension = "mp4").first()
+    video = yt.streams.filter(progressive = True, file_extension = "mp4").order_by('resolution').desc().first()
     yt.register_on_progress_callback(downloadProgress)
     yt.register_on_complete_callback(downloadComplete)
     video.download(download_path)
@@ -46,7 +52,7 @@ def downloadComplete(stream,file_path):
 def setDetails(yt):
     download_folder.set(download_path)
     video_title.set(yt.title)
-    video = yt.streams.filter(progressive = True, file_extension = "mp4").first()
+    video = yt.streams.filter(progressive = True, file_extension = "mp4").order_by('resolution').desc().first()
     size = format(int(video.filesize)/1000000,".2f")
     video_size.set(str(size)+"mb")
     Label(details_frame,text="Title : ").grid(row=0,column=0,padx=10,pady=5)
@@ -106,4 +112,5 @@ if __name__ == "__main__":
     per_label = Label(download_frame,textvariable=per_var)
     per_label.grid(row=0,column=1)
 
+    root.bind('<Control-c>', cancellDownload)
     root.mainloop()
